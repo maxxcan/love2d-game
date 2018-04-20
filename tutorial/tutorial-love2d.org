@@ -1,0 +1,13 @@
+#+TITLE: tutorial-love2d
+#+AUTHOR: Patricio Martínez 
+#+DATE: <2018-04-20 vie>
+#+EMAIL: maxxcan@disroot.org
+
+* Introducción 
+
+Este tutorial es una traducción casi literal de un tutorial de introducción de Love2D. La traducción la realizo tanto para aprender
+como para que haya más documentación en español sobre este framework. 
+
+El original está en [[http://sheepolution.com/learn/book/contents][Sheepolution]]
+
+
