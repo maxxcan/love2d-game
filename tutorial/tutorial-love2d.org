@@ -119,7 +119,6 @@ Y finalmente, el nombre de la variable no puede ser una palabra clave. Una palab
 | repeat | return | then | true     | until  |
 | while  |        |      |          |        |
 
-
 * Funciones 
 
 Con las funciones nosotros guardamos trozos de código. Esto nos permite ejecutar este código en donde nosotros queramos. 
@@ -203,3 +202,94 @@ Nuestra función sum devuelve la suma de a y de b.
 ** ¿Por qué las funciones?
 
 Usando funciones nosotros no tenemos que repetir cierto código una y otra vez de nuevo. Podemos simplemente hacer llamadas a la función que necesitemos. Esto es grande, porque nosotros podemos cambiar una función en el futuro, y no tener la necesidad de tener que cambiarla en todas los lugares donde la hemos puesto. 
+* Love 
+** Qué es Love 
+
+Love es lo que llamamos un *framework* o marco de trabajo. Dicho de una forma simple, es una herramienta que hace que programar ciertas cosas sea más fácil. 
+
+Love está hecho con *C++* y *OpenGL*, los cuales están considerados como muy complicados. La fuente de Love es muy compleja. Pero todo esta complejidad hace que sea muy fácil crear juegos para nosotros.
+
+Por ejemplo, con *love.graphics.ellipse()*, nosotros podemos dibujar una elipse. Pero en cambio, el código que hay detrás es este:
+
+#+BEGIN_SRC C
+void Graphics::ellipse(DrawMode mode, float x, float y, float a, float b, int points)
+{
+    float two_pi = static_cast<float>(LOVE_M_PI * 2);
+    if (points <= 0) points = 1;
+    float angle_shift = (two_pi / points);
+    float phi = .0f;
+
+    float *coords = new float[2 * (points + 1)];
+    for (int i = 0; i < points; ++i, phi += angle_shift)
+    {
+        coords[2*i+0] = x + a * cosf(phi);
+        coords[2*i+1] = y + b * sinf(phi);
+    }
+
+    coords[2*points+0] = coords[0];
+    coords[2*points+1] = coords[1];
+
+    polygon(mode, coords, (points + 1) * 2);
+
+    delete[] coords;
+}
+#+END_SRC
+
+
+Podríamos no entender el código anterior y por eso usamos Love. Los creadores de Love hacen el trabajo duro de programación y nos dejan a nosotros la parte divertida. 
+
+** Lua 
+
+Lua es el lenguaje de programación que usa Love. Lua es un lenguaje de programación que no está hecho por o para Love. Los creadores de Love eligieron Lua como lenguaje para su framework. 
+
+Así, ¿qué parte de lo que programamos es Love y qué partes es Lua? Muy simple, todo lo que empieza con Love es parte del framework Love. Todo lo demás es Lua
+
+Por ejemplo, estas funciones son parte de Love:
+
+#+BEGIN_SRC lua
+love.graphics.circle("fill", 10, 10, 100, 25)
+love.graphics.rectangle("line", 200, 30, 120, 100)
+#+END_SRC
+
+Y esto es Lua: 
+
+#+BEGIN_SRC lua
+function test(a, b)
+return a + b
+end
+print(test(10, 20))
+#+END_SRC
+
+** Cómo funciona Love 
+
+Love llama a *3 funciones*. La primera es *love.load()* . Aquí creamos nuestras variables.
+
+Después llamamos a *love.update() y love.draw()* repetidamente en ese orden. 
+
+Así: love.load() -> love.update() -> love.draw() -> love.update() -> love.draw() -> love.update(), etc.
+
+Detrás de escena, Love llama a esas funciones, y nosotros las creamos y las rellenamos con código. A esto lo llamamos *retrollamada* 
+
+Love está hecho con *módulos*, tales como love.graphics, love.audio, love.filesystem. Hay sobre 15 módulos y cada uno de ellos está enfocado en una cosa. Todo lo que dibujas está hecho con love.graphics. Y todo lo relacionado con sonido está hecho con love.audio. 
+
+Por ahora, nos centraremos en love.graphics.
+
+Love tiene una [[https://www.love2d.org/wiki/Main_Page][wiki]] que explica cada una de las funciones. Si nosotros queremos dibujar un rectangulo, pues iremos en la wiki a [[https://www.love2d.org/wiki/love.graphics][love.graphics()]] y buscaremos en la página por "rectangle". Y esto es lo que encontraremos en [[https://www.love2d.org/wiki/love.graphics.rectangle][rectangle]]. 
+
+Esta página nos dice lo que la función hace y que argumentos necesita. El primer argumento es mode, y necesita de un tipo llamado *DrawMode*. 
+
+Nosotros podemos pinchar en [[https://www.love2d.org/wiki/DrawMode][DrawMode]] para obtener más información. 
+
+DrawMode es una cadena que admite "fill" o "line", y controla el cómo las figuras son dibujadas.
+
+Todos los argumentos siguientes son números. 
+
+Así si queremos dibujar un rectángulo relleno, hacemos lo siguiente:
+
+#+BEGIN_SRC lua
+  function love.draw()
+    love.graphics.rectangle("fill", 100, 200, 50, 80)
+  end
+#+END_SRC
+
+Ahora si ejecutamos el juego, podremos ver un rectángulo relleno
