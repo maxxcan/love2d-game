@@ -10,4 +10,113 @@ como para que haya más documentación en español sobre este framework.
 
 El original está en [[http://sheepolution.com/learn/book/contents][Sheepolution]]
 
+Este tutorial está escrito para personas sin experiencia en programación. Así que si no tienes ninguna experiencia en programación, espero que este tutorial también ayude con tu formación en ese área. 
+
+* Instalación 
+
+Los capítulos 2 y 3 se pueden realizar sin necesidad de instalar nada. Puedes usar [[https://repl.it/languages/lua][repl.it]] como alternativa. 
+
+** Love 
+
+Para instalar en todo caso Love, en nuestro ordenador tenemos que ir a [[https://www.love2d.org/][love2d.org]]. Una vez allí podemos elegir la versión que necesitemos según nuestra computadora y sistema operativo 
+
+En mi caso uso Archlinux con lo que el framework nos lo podemos descargar directamente desde AUR con el gestor de paquetes yaourt. Tan solo tenemos que ejecutar el comando: 
+
+: yaourt -S love 
+
+** Editor 
+
+Para este tutorial podemos elegir el editor o IDE que nos apetezca. Yo en mi caso usaré Emacs que además de soporte para Lua (el lenguaje de este framework) hay un pequeño modo para love2d que nos ayuda. 
+
+El autor del artículo original recomienda *Zerobrane* que es un IDE con muchas características útiles para trabajar con Lua. Puedes descargarlo desde [[https://studio.zerobrane.com/support][aquí.]] 
+
+Si posees Archlinux también puedes descargarlo usando *yaourt* 
+
+
+Una vez tengamos abierto nuestro editor o IDE preferido lo abrimos y creamos un fichero con el siguiente código:
+
+#+BEGIN_SRC lua
+  function love.draw()
+    love.graphics.print("Hola Mundo!", 100, 100)
+  end 
+
+#+END_SRC
+
+Y lo salvamos con el nombre de *main.lua* 
+
+* Variables 
+
+¿Qué es a + b?
+
+Una variable es un símbolo que apunta a un valor. Para ello tendremos que indicarle cual es el valor al que apunta. 
+
+Si queremos saber cual es la suma de a + b entonces tendremos que asignarle valores. Para hacer esto escribimos:
+
+: a = 5
+: b = 3
+: print(a + b)
+
+-- Resultado: 8
+
+La palabra que usemos para guardar los valores puede ser cualquiera.
+
+: sheep = 3
+: test = 20
+: PANTS = 1024
+: asdfghjkl = 42 
+
+La variables son sensibles a mayúsculas y minúsculas. Esto significa que no es lo mismo la variable a que la variable A. Por ejemplo.
+
+: sheep = 3 
+: SHEEP = 10
+: SHeEp = 200
+
+Estas son 3 variables distintas
+
+A la hora de asignar variables podemos hacer algo más que asignar valores. 
+
+: a = 20 - 10 -- Sustracción
+: b = 20 * 10 -- Multiplicación
+: c = 20 / 10 -- División
+: d = 20 ^ 10 -- Exponenciación 
+
+Para los números con decimales usamos el punto. 
+
+: a = 10.4
+: b = 2.63
+: c = 0.1
+: pi = 3.141592
+
+* Cadenas de texto
+
+Una variable también puede guardar un texto.
+: texto = "Hola Mundo"
+
+Podemos conectar cadenas de caracteres usando dos puntos (..)
+
+: nombre = "Daniel"
+: edad = "22"
+: texto = "Hola, mi nombre es " .. nombre .. ", y tengo la edad de " .. "años"
+: print(texto)
+
+Salida -- "Hola, mi nombre es Daniel y tengo la edad de 22 años"
+
+** Reglas nombre variables 
+
+Hay unas pocas reglas para nombrar a las variables. Primero de todo, la variable puede tener un número en ella, pero no al principio. 
+
+: test8 -- Bien
+: te8st -- Bien
+: 8test -- Mal
+
+El nombre de la variable tampoco puede incluir caracteres especiales tales como @#$%^&* 
+
+Y finalmente, el nombre de la variable no puede ser una palabra clave. Una palabra clave es una palabra que el lenguaje de ordenador usa. Aquí tenemos una lista de palabras clave: 
+
+| and    | break  | do   | else     | elseif |
+| end    | false  | for  | function | if     |
+| in     | local  | nil  | not      | or     |
+| repeat | return | then | true     | until  |
+| while  |        |      |          |        |
+
 
