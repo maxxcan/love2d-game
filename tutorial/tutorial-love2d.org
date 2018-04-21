@@ -293,3 +293,112 @@ Así si queremos dibujar un rectángulo relleno, hacemos lo siguiente:
 #+END_SRC
 
 Ahora si ejecutamos el juego, podremos ver un rectángulo relleno
+
+
+* Moviendo un rectángulo 
+
+Ahora podemos empezar con la parte que a mí me gusta llamar "la parte divertida". Vamos a hacer que se mueva. 
+
+Empecemos con las 3 retrollamadas principales.
+
+#+BEGIN_SRC lua
+function love.load()
+
+end
+
+function love.update()
+
+end
+
+function love.draw()
+
+end
+#+END_SRC
+
+
+Y ahora dibujaremos un rectángulo.
+
+#+BEGIN_SRC lua
+  function love.draw()
+    love.graphics.rectangle("line", 100, 50, 200, 150)
+  end 
+#+END_SRC
+
+El segundo y tercer argumento de esta función son la posición x e y. 
+
+x significa la posición "horizontal" de la pantalla. 0 es la zona izquierda de la pantalla
+
+y significa la posición "vertical" de la pantalla. 0 es la zona alta de la pantalla
+
+
+[[./img/coordenadas.png]]
+
+
+Ahora queremos mover el rectángulo. Es hora de empezar a pensar como un programador. ¿Qué es lo que exactamente necesitamos para que el rectángulo se mueva a la derecha? La posición x necesita ir 100, 101, 102, y así. Pero nosotros no podemos cambiar de 100 a 101. 100 es simplemente 100. Necesitamos tener algo que pueda cambiar en cualquier número que nosotros queramos. Eso es, una variable!
+
+En love.load creamos una nueva variable llamada x, y reemplazamos el 100 en love.graphics.rectangle por x. 
+
+#+BEGIN_SRC lua
+    function love.load()
+      x = 100
+    end
+    function love.draw()
+      love.graphics.rectangle("line", x, 50, 200, 150)
+    end
+#+END_SRC
+
+Ahora la posición x de nuestro rectángulo es le valor de x.
+
+Ahora queremos hacer que el rectángulo se mueva. Esto lo haremos en love.update(). Cada actualización queremos incrementar x por 5. En otras palabras, x necesita ser el valor de x + 5. Y eso es exactamente lo que vamos a escribir
+
+#+BEGIN_SRC lua
+  function love.update()
+    x = x + 5
+  end
+#+END_SRC
+
+Ahora cuando x valga 100, cambiará x en 100 + 5. En la siguiente actualización x valdrá 105 y x cambiará a 105 + 5, etc. 
+
+Ejecuta el juego y verás como el rectángulo se mueve
+
+
+** Tiempo Delta 
+
+Hemos conseguido mover el rectángulo, pero hay un pequeño problema. Si queremos ejecutar el juego en una computadora distinta, el rectángulo podría moverse con una velocidad distinta. Esto es porque no todas las computadoras actualizan a la misma frecuencia, y esto puede causar problemas. 
+
+Por ejemplo, le decimos a la Computadora A que corre a 100 fps (fotogramas por segundo), y la Computadora B correo a 200 fsp. 
+
+: 100 x 5 = 500
+: 200 x 5 = 1000
+
+Así en 1 segundo, x ha incrementado en 500 en la Computadora A, mientras que en la Computadora B lo ha hecho en 1000.
+
+Afortunadamente, hay una solución para esto: el tiempo Delta.
+
+Cuando en Love llamamos a love.update, le pasará un argumento. Añadirá el parámetro dt(tiempo delta) en el love.update y lo mostraremos. 
+
+#+BEGIN_SRC lua
+  function love.update(dt)
+    print(dt)
+    x = x + 5
+  end
+#+END_SRC
+
+El tiempo Delta es el tiempo que pasa entre la previa y la actual actualización. Así en la computadora A, la cual corre a 100 fps, el tiempo delta tendrá una media de 1/100 lo cual es 0.01.
+
+En la computadora B, el tiempo delta podría ser 1/200, lo cual es 0.005.
+
+Así en un segundo, la computadora A actualiza 100 veces y el incremento de x es de 5 x 0.01 y la computadora B actualiza 200 veces y el incremento es de 5 x 0.005. 
+
+: 100 x 5 * 0.01 = 5
+: 200 x 5 * 0.005 = 5
+
+Usando el tiempo Delta en nuestro rectángulo lo moveremos a la misma velocidad en todas la computadoras. 
+
+#+BEGIN_SRC lua
+  function love.update(dt)
+    x = x + 5 * dt
+  end
+#+END_SRC
+
+Ahora nuestro rectángulo se moverá 5 píxeles por segundo, en todas la computadoras. 
