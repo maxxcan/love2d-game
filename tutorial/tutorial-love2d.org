@@ -120,3 +120,86 @@ Y finalmente, el nombre de la variable no puede ser una palabra clave. Una palab
 | while  |        |      |          |        |
 
 
+* Funciones 
+
+Con las funciones nosotros guardamos trozos de código. Esto nos permite ejecutar este código en donde nosotros queramos. 
+
+Hay dos formas de crear una función: 
+
+#+BEGIN_SRC lua
+  ejemplo = function ()
+    print("Hola Mundo!")
+  end
+#+END_SRC
+
+Y la forma más común:
+
+#+BEGIN_SRC lua
+  function ejemplo()
+    print("Hola Mundo!")
+  end
+#+END_SRC
+
+Primero empezamos usando la palabra clave *function*, seguido del nombre de la función. Una función es un tipo de varialbe, así que las mismas reglas que aplicamos cuando nombramos uan variable se aplica para las unciones. Después del nombre ponemos unos paréntesis. Ahora podemos empezar a escribgir el código que queremos poner dentro de la función. 
+
+Una vez hecho esto, tenemos que escribir el nombre de la función para obtener el resultado. Esto es lo que llamamos *llamada a una función* 
+
+** Parámetros 
+
+Veamos el siguiente código 
+
+#+BEGIN_SRC lua
+  function ejemplo(num)
+    print("Me gusta el número " .. num)
+  end 
+#+END_SRC
+
+: ejemplo(15)
+: ejemplo(2)
+: ejemplo(100)
+
+: -- Salida:
+: -- "Me gusta el número 15"
+: -- "Me gusta el número 2"
+: -- "Me gusta el número 100"
+
+Dentro del paréntesis de la función nosotros podmeos poner lo que llamamos *parámetros*. Los parámetros son variables temporales que solo existen dentro de la función. En este caso usamos el parámetro num. Ahora podemos usar num como cualquier otra variable.
+
+** Return 
+
+Las funciones puede devolver un valor, el cual podemos guardarlo en una variable, por ejemplo. Podemos devolver un valor usando la palabra clave *return* 
+
+#+BEGIN_SRC lua
+  function dameCinco()
+    return 5
+  end
+
+a = dameCinco()
+print(a)
+
+#+END_SRC
+
+: -- Salida: 5
+
+Vemos el valor que devuelve dameCinco gracias a *return* 
+
+Otro ejemplo: 
+
+#+BEGIN_SRC lua
+  -- Múltiples argumentos y parámetros separados por comas
+  function sum(a, b)
+    return a + b
+  end
+
+  print(sum(200, 95))
+#+END_SRC
+
+: -- Salida:
+: -- 34
+: -- 295
+
+Nuestra función sum devuelve la suma de a y de b.
+
+** ¿Por qué las funciones?
+
+Usando funciones nosotros no tenemos que repetir cierto código una y otra vez de nuevo. Podemos simplemente hacer llamadas a la función que necesitemos. Esto es grande, porque nosotros podemos cambiar una función en el futuro, y no tener la necesidad de tener que cambiarla en todas los lugares donde la hemos puesto. 
