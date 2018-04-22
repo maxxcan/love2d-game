@@ -402,3 +402,151 @@ Usando el tiempo Delta en nuestro rectángulo lo moveremos a la misma velocidad 
 #+END_SRC
 
 Ahora nuestro rectángulo se moverá 5 píxeles por segundo, en todas la computadoras. 
+
+* Declaración if
+
+Con las declaraciones if, nosotros podemos permitir que trozos de código sean ejecutadas solo cuando una condición ocurre. 
+
+Creamos una declaración como esta: 
+
+#+BEGIN_SRC lua
+if condition then
+-- code 
+end 
+#+END_SRC
+
+Una condición, o declaración, es algo que puede ser verdadero o falso
+
+Por ejemplo: 5 > 9
+
+El > significa mayor qué. Así la declaración es que 5 es mayor que 9, lo cual es falso.
+
+Puesto una declaración if en el código del incremento de x.
+
+#+BEGIN_SRC lua
+  function love.update(dt)
+    if 5 > 9 then
+      x = x + 100 * dt
+    end
+  end 
+#+END_SRC
+
+Cuando ejecutamos el juego veremos que el rectángulo no se mueve. Esto es porque la declaración es falsa. Si nosotros lo cambiamos por 5 < 9 (5 es menor que 9), entonces la declaración es verdadera, y el código dentro de la declaración if se ejecutará. 
+
+Con esto, nosotros podemos por ejemplo hacer que x vaya hasta 700, y entonces hacer que se pare de mover con x < 700
+
+#+BEGIN_SRC lua
+  function love.update(dt)
+    if x < 700 then
+      x = x + 100 * dt
+    end
+  end
+#+END_SRC
+
+Si nosotros queremos comprobar si un valor es igual a otro, necesitamos usar dos signos iguales (==). 
+
+Por ejemplo: 4 == 7
+
+Un signo igual es para asignar, 2 signos iguales es para comparar. 
+
+: x = 10 --Asignamos 10 a x
+: x == 10 --Comparamos 10 a x
+
+También podemos usar >= y <= si un valor es mayor o igual o menor o igual que otro.
+
+: 10 <= 10 --verdadero, 10 igual a 10 
+: 15 >= 4 --verdadero, 15 es mayor que 4
+
+
+** Buleanos 
+
+Una variable puede ser verdadera o falsa. Este tipo de variables las llamamos buleanas. 
+
+Vamos a hacer una nueva variable llamada mover, con el valor de verdadero (true), y veremos si la variable es verdadera en nuestra declaración. 
+
+#+BEGIN_SRC lua
+  function love.load()
+    x = 100
+    mover = true
+  end 
+
+  function love.update(dt)
+    --Recuerda usar dos signos ==
+    if mover == true then 
+      x = x + 100 * dt
+    end
+  end 
+#+END_SRC
+
+mover es verdadero, por lo tanto nuestro rectángulo se moverá. Pero decir mover == true, es redundante. Comprobamos si es verdadero que el valor de mover es verdadero. Simplemente usando mover como una condición correcta sería suficiente. 
+
+#+BEGIN_SRC lua
+  if mover then
+    x = x + 100 * dt
+  end
+#+END_SRC
+
+Si queremos comprobar que mover es falso, solo necesitamos poner un *not* delante de él. 
+
+#+BEGIN_SRC lua
+  if not move then
+    x = x + 100 * dt
+  end
+#+END_SRC
+
+Si queremos comprobar que un número no es igual a otro número, usamos el símbolo ~.[fn:1]
+
+#+BEGIN_SRC lua
+  if 4 ~= 5 then
+    x = x + 100 * dt
+  end
+#+END_SRC
+
+También podemos asignar verdadero o falso a una variable con una declaración.
+
+Por ejemplo:
+
+: mover = 6 > 3
+
+Si comprobamos que mover es verdadero, y entonces cambiamos la variable a falso dentro de la declaración if, esto no es como si saltamos fuera de la declaración. Todo el código siguiente será igualmente ejecutado.
+
+#+BEGIN_SRC lua
+  if move then
+    move = false
+    print("Esto todavía se ejecutará!")
+    x = x + 100 * dt
+  end
+#+END_SRC
+
+** Flechas direccionales
+
+Vamos ahora a hacer que el rectángulo se mueva si mantenemos la tecla direccional derecha presionada. Para esto usamos la función *love.keyboard.isDown* ([[https://www.love2d.org/wiki/love.keyboard.isDown][wiki]]).
+
+Vamos a fijarnos que la de D de Down está en mayúsculas. Esto es un tipo de casing llamado camelCasing. Esto significa que empezamos con la palabra en minúscula, y entonces cada primera letra de las siguientes palabras va en mayúscula. 
+
+Ahora le pasamos la cadena "right" como primer argumento para que compruebe que la flecha direccional derecha está presionada.
+
+
+#+BEGIN_SRC lua
+  if love.keyboard.isDown("right") then
+    x = x + 100 * dt
+  end
+#+END_SRC
+
+Así ahora cuando mantengamos pulsado el botón derecho de las flechas direccionales el rectángulo se moverá. 
+
+También podemos *else* para decirle a nuestro juego qué hacer cuando la condición es falsa. Vamos a hacer que nuestro rectángulo se mueve a la izquierda, cuando no presionamos la tecla derecha. 
+
+#+BEGIN_SRC lua
+  if love.keyboard.isDown("right") then
+    x = x + 100 * dt
+  else
+    x = x - 100 * dt --Aquí decrecemos el valor de x
+  end
+#+END_SRC
+
+
+
+* Footnotes
+
+[fn:1] Tilde en inglés virgulilla en español
