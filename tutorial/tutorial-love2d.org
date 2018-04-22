@@ -545,6 +545,36 @@ También podemos *else* para decirle a nuestro juego qué hacer cuando la condic
   end
 #+END_SRC
 
+También podemos comprobar si otra declaración es verdadera, después del primer falso, con *elseif*. Haremos la prueba de comprobar si la flecha direccional derecha está presionada y si no, comprobaremos la izquierda. 
+
+#+BEGIN_SRC lua
+  if love.keyboard.isDown("right") then
+    x = x + 100 * dt
+  elseif love.keyboard.isDown("left") then
+    x = x - 100 * dt
+  end
+#+END_SRC
+
+Intentaremos hacer que el cuadrado se mueva hacia arriba y abajo también. 
+
+** and & or 
+
+  Con *and* podemos comprobar si múltiples declaraciones son ciertas.
+
+#+BEGIN_SRC lua 
+  if 5 < 9 and 14 > 7 then
+    print("Ambas declaracione son ciertas")
+  end
+#+END_SRC
+
+Con *or*, la declaración if se ejecutará si cualquiera de las declaraciones son ciertas.
+
+#+BEGIN_SRC lua 
+  if 20 < 9 or 14 > 7 or 5 == 10 then
+    print("Una de esas declaraciones es ciertas")
+  end
+#+END_SRC
+
 
 
 * Footnotes
