@@ -575,8 +575,240 @@ Con *or*, la declaración if se ejecutará si cualquiera de las declaraciones so
   end
 #+END_SRC
 
+* Tablas y bucles for 
+
+** Tablas 
+
+Las tablas son básicamente listas en las cuales podemos guardar valores.
+
+Podemos crear una tabla usando *corchetes* ({ }):
+
+#+BEGIN_SRC lua 
+  function love.load()
+    frutas = {}
+  end 
+
+function love.update()
+
+end
+
+function love.draw()
+
+end
+#+END_SRC
+
+Acabamos de crear una tabla llamada frutas. Ahora introduciremos valores dentro de la tabla. Hay múltiples formas de hacer esto.
+
+Una forma es poner los valores dentro de corchetes.
+
+#+BEGIN_SRC lua 
+  function love.load()
+    --Cada valor es separado por comas, igual que parámetros y argumentos
+    frutas = {"manzana", "banana"}
+  end
+#+END_SRC
+
+También podemos usar la función *table.insert*. El primer argumento es la tabla, el segundo argumento es el valor que nosotros queremos guardar dentro de la tabla. 
+
+#+BEGIN_SRC lua 
+  function love.load()
+    --Cada valor es separado por comas
+    frutas = {"manzana", "banana"}
+    table.insert(frutas, "pera")
+  end
+#+END_SRC
+
+Así ahora después de *love.load* nuestra tabla contendrá "manzana", "banana" y "pera". Para probarlo mostraremos  los valores en la pantalla. Para eso usaremos *love.graphics.print*. 
+
+#+BEGIN_SRC lua 
+  function love.draw()
+    -- Argumentos (cadena, posición-x, posición-y)
+    love.graphics.print("Test", 100, 100)
+  end
+#+END_SRC
+
+Cuando ejecutemos el juego, veremos el texto "test" escrito. Podemos acceder a los valores de nuestra tabla escribiendo el nombre de las tablas, seguido de corchetes ([ ]). Dentro de esos corchetes, escribimos la posición de los valores que queremos. 
+
+Como hemos dicho, las tablas son listas de valores. Primero hemos añadido "manzana" y "banana", así que esos son el primero y el segundo valor en la lista. Después hemos añadido "pera", así que está en la tercera posición en la lista. La cuarta posición no tiene valor (todavía).
+
+Así si nosotros queremos que aparezca "manzana", primero tenemos que obtener el primer valor de la lista. 
+
+#+BEGIN_SRC lua 
+  function love.draw()
+    love.graphics.print(frutas[1], 100, 100)
+  end
+#+END_SRC
+
+Ahora queremos dibujar las tres frutas. Nosotros podriamos usar love.graphics.print 3 veces, cada una con una entrada de tabla diferente.. 
+
+#+BEGIN_SRC lua 
+    function love.draw()
+      love.graphics.print(frutas[1], 100, 100)
+      love.graphics.print(frutas[2], 100, 100)
+      love.graphics.print(frutas[3], 100, 100)
+#+END_SRC
+
+.. pero imaginemos que tenemos 100 valores en nuestra tabla. Afortunadamente, hay una solución para esto: los bucles for 
+
+** Bucles for
+
+Una bucle for es una forma de repetir una porción de código un número determinado de veces.
+
+Vamos a escribir un bucle for como este:
+
+#+BEGIN_SRC lua 
+  function love.load()
+    frutas = {"manzana", "banana"}
+    table.insert(frutas, "pera")
+
+    for i=1,10 do
+      print("hola", i)
+    end
+  end
+#+END_SRC
+
+Si ejecutamos el juego podemos ver que aparece hola 1, hola 2, hola 3, hasta 10.
+
+Para crear un bucle for, primero escribimos *for*. Después escribimos una variable y le damos un valor numérico. Ahí es donde el bucle for empieza. La variable puede ser nombrada de cualquier forma pero es común usar *i*. Esta variable puede solo ser usada dentro del bucle for (al igual que funciones y parámetros). Después describimos el número el cual podría contar. Así por ejemplo *for i=6,18* hace que el bucle empiece en 6 y se mantenga hasta 18.
+
+Hay también un tercer número opcional. Es el cómo incrementa la variable. Si yo escribo *for i=6,18,4* esto hará la sucesión *6, 10, 14, 18. Con esta opción podemos hacer bucles que vayan hacia atrás con *-1*. 
+
+Nuestra tabla empeiza con 1 y tiene 3 valores, así que escribiremos:
+
+#+BEGIN_SRC lua 
+  function love.load()
+    frutas = {"manzana", "banana"}
+    table.insert(frutas, "pera")
+
+    for i=1,3 do
+      print(frutas[i])
+    end
+  end
+#+END_SRC
+
+Cuando ejecutemos el juego veremos como se dibuja las 3 frutas. En el primer bucle ejecutará *frutas[1]*, en el segundo *frutas[2]* y en el tercero y último *frutas[3]* 
+
+
+** Editando tablas 
+
+¿Podemos añadir o borrar valores de una tabla? Podriamos cambiar e lvalor de 3 en otro núemro. Para eso usamos #frutas. Con el símbolo #, podemos obtener la longitud de una tabla. La longitud de una tabla se refiere al número de cosas que hayh en esa tabla. La longitud sería de 3 en nuestro caso.
+
+#+BEGIN_SRC lua 
+  function love.load()
+    frutas = {"manzana", "banana"}
+    table.insert(frutas, "pera")
+
+    print(#frutas)
+    --Salida: 3
+
+    for i=1,#frutas do
+      print(frutas[i])
+    end
+  end
+#+END_SRC
+
+
+Usemos este conocimiento para dibujar las tres frutas.
+
+#+BEGIN_SRC lua 
+  function love.draw()
+    for i=1,#frutas do
+      love.graphics.print(frutas[i], 100, 100)
+    end
+  end
+#+END_SRC
+
+Si ejecutamos el juego veremos las tres frutas, esperando que todas se dibujen en la misma posición. Nosotros podemos arreglar esto dibujando cada elemento a una altura distinta.
+
+#+BEGIN_SRC lua 
+  function love.draw()
+    for i=1,#frutas do
+      love.graphics.print(frutas[i], 100, 100 + 50 * i)
+    end
+  end
+#+END_SRC
+
+
+Así ahora "manzana" se dibujará en la posición 100 + 50 * 1, la cual es 150. Entonces la "banana" se dibujará a 200 y la pera a 250. 
+
+Si queremos añadir otra fruta, no tenemos que cambiar nada, será dibujada automáticamente. Añadamos "piña" 
+
+#+BEGIN_SRC lua 
+  function love.load()
+    frutas = {"manzana", "banana"}
+    table.insert(frutas, "pera")
+    table.insert(frutas, "piña")
+  end
+#+END_SRC
+
+
+También podemos borrar valores de nuestra tabla. Para eso usamos *table.remove*. El primer argumento es la tabla de la cual queremos borrar algo, el segundo argumento es la posición que queremos borrar. Así, si queremos borrar la banana, haremos lo siguiente:
+
+#+BEGIN_SRC lua 
+  function love.load()
+    frutas ={"manzana", "banana"}
+    table.insert(frutas, "pera")
+    table.insert(frutas, "piña")
+    table.remove(frutas, 2)
+  end
+#+END_SRC
+
+Cuando borramos un valor de una tabla con *table.remove*, todos los elementos siguientes se mueven hacia arriba. Así lo que está en la posicion 3 estará ahora en la posición 2 en la tabla. 
+
+También podemos añadir o cambiar los valores dentro de la tabla directamente. Por ejemplo, podemos cambiar "manzana" por "tomate":
+
+#+BEGIN_SRC lua 
+  function love.load()
+    frutas = {"manzana", "banana"}
+    table.insert(frutas, "pera")
+    table.insert(frutas, "piña")
+    table.remove(frutas, 2)
+    --El valor que queremos cambiar es el valor 1
+    frutas[1] = "tomate"
+  end
+#+END_SRC
+
+** Ipairs 
+
+Vuelta a los bucles for. Hay una forma distinta y más fácil  de recorrer una tabla. Podemos usar un bucle ipairs. 
+
+#+BEGIN_SRC lua 
+  function love.load()
+    frutas = {"manzana", "banana"}
+    table.insert(frutas, "pera")
+    table.insert(frutas, "piña")
+    table.remove(frutas, 2)
+    frutas[1] = "tomate"
+
+    for i,v in ipairs(frutas) do
+      print(i,v)
+    end
+
+    --Salida:
+    --1, "tomate"
+    --2, "pera"
+    --3, "piña"
+  end
+#+END_SRC
+
+Este bucle de bucles o llamadas iterativas atraviesan todos los valores de la tabla. Las variables *i* nos dicen la posición de la tabla, *v* es el valor de la posición en la tabla. Esto es básicamente un atajo para *frutas[i]*. Por ejemplo, en la primera iteracción los valores de las variables para las variables i serían 1 y v sería "manzana". En la segunda iteracción, i y v serían 2 y "pera" respectivamente. Ahora usaremos los ipairs para dibujar nuestras tablas. 
+
+#+BEGIN_SRC lua 
+  function love.draw()
+    --i y v son varialbes, así que podemos nombrarlas como queramos
+    for i,frt in ipairs(frutas) do
+      love.graphics.print(frt, 100, 100 + 50 * i)
+    end
+  end
+#+END_SRC
+
+
+
+
+
 
 
 * Footnotes
 
 [fn:1] Tilde en inglés virgulilla en español
+
