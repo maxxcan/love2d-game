@@ -26,7 +26,7 @@ En mi caso uso Archlinux con lo que el framework nos lo podemos descargar direct
 
 ** Editor 
 
-Para este tutorial podemos elegir el editor o IDE que nos apetezca. Yo en mi caso usaré Emacs que además de soporte para Lua (el lenguaje de este framework) hay un pequeño modo para love2d que nos ayuda. 
+Para este tutorial podemos elegir el eband waditor o IDE que nos apetezca. Yo en mi caso usaré Emacs que además de soporte para Lua (el lenguaje de este framework) hay un pequeño modo para love2d que nos ayuda. 
 
 El autor del artículo original recomienda *Zerobrane* que es un IDE con muchas características útiles para trabajar con Lua. Puedes descargarlo desde [[https://studio.zerobrane.com/support][aquí.]] 
 
@@ -802,6 +802,110 @@ Este bucle de bucles o llamadas iterativas atraviesan todos los valores de la ta
   end
 #+END_SRC
 
+* Objetos 
+
+En el capítulo anterior usamos tablas como listas numeradas, pero también podemos guardar los valores de una forma diferente: Con cadenas de texto. 
+
+#+BEGIN_SRC lua 
+  function love.load()
+    --rect es una contracción de rectángulo
+    rect = {}
+    rect["anchura"] = 100
+  end
+#+END_SRC
+
+"Anchura" en este caso es lo que llamaríamos un valor clave o propiedad. Así la tabla cuadrada tiene ahora la propiedad de "anchura" con un valor de 100. No necesitamos usar cadenas cada vez que queramos crear una propiedad. Un punto (.) es el atajo para esto. Añadamos más propiedades.
+
+#+BEGIN_SRC lua 
+  function love.load()
+    rect = {}
+    rect.x = 100
+    rect.y = 100 
+    rect.width = 70
+    rect.height = 90
+  end 
+#+END_SRC
+
+Ahora que tenemos nuestras propiedades podemos empezar a dibujar el rectángulo.
+
+#+BEGIN_SRC lua 
+  function love.draw()
+    love.graphics.rectangle("line", rect.x, rect.y, rect.width, rect.height)
+  end
+#+END_SRC
+
+Y podemos moverlo
+
+#+BEGIN_SRC lua 
+    function love.load()
+      rect = {}
+      rect.x = 100
+      rect.y = 100
+      rect.width = 70
+      rect.height = 90
+
+      --Añadimos la propiedad velocidad
+      rect.speed = 100
+    end
+
+    function love.update(dt)
+      rect.x = rect.x + rect.speed * dt
+    end
+
+#+END_SRC
+
+
+Ahora tenemos un rectángulo que se mueve de nuevo, pero mostramos el poder de las tablas. Ahora queremos crear múltiples rectángulos moviéndose. Para esto vamos a usar una tabla como una lista. Haremos una lista de rectángulos. Moveremos el código dentro de *love.load* a una nueva función y crearemos una nueva talba en *love.load* 
+
+#+BEGIN_SRC lua 
+  function love.load()
+    listaDeRectangulos = {}
+  end 
+
+  function createRectangulo()
+    rect = {}
+    rect.x = 100
+    rect.y = 100 
+    rect.width = 70
+    rect.height = 90
+    rect.speed = 100 
+
+  --Ponemos el nuevo rectángulo en la lista
+    table.insert(listaDeRectangulos, rect)
+  end 
+#+END_SRC
+
+
+Así ahora cada vez que llamemos a createRectangulo, un nuevo objeto rectángulo será añadido a nuestra lista. Eso es correcto, una talba rellena de tablas. Haremos eso, así que cada vez que presionemos la barra espaciadora, llamaremos a createRectangulo. Haremos esto con la llamada *love.keypressed*. 
+
+#+BEGIN_SRC lua 
+  function love.keypressed(key)
+    if key == "space" then 
+      createRectangulo()
+    end
+  end
+#+END_SRC
+
+Cada vez que presionemos una telca, Love llamará a *love.keypressed* y le pasará la tecla presionada como argumento. Si esa tecla es la barra espaciadora, llamaremos a createRectangulo. 
+
+La última cosa a hacer es cambiar nuestra actualización y que dibuje esa función. 
+
+#+BEGIN_SRC lua 
+    function love.update(dt)
+      for i,v in ipairs(listaDeRectangulos) do
+        v.x = v.x + v.speed * dt
+      end
+    end
+
+    function love.draw(dt)
+      for i,v in ipairs(listaDeRectangulos) do
+        love.graphics.rectangle("line", v.x, v.y, v.width, v.height)
+      end
+    end
+#+END_SRC
+
+Ahora cuando ejecutemos el juego, un rectángulo en movimiento aparecerá cada vez que presionemos la barra espaciadora.
+
 
 
 
@@ -810,5 +914,5 @@ Este bucle de bucles o llamadas iterativas atraviesan todos los valores de la ta
 
 * Footnotes
 
-[fn:1] Tilde en inglés virgulilla en español
+[fn:1] Tilde en inglés virgulilla en españo. 
 
