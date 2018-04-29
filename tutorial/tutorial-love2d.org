@@ -639,7 +639,7 @@ Así si nosotros queremos que aparezca "manzana", primero tenemos que obtener el
   end
 #+END_SRC
 
-Ahora queremos dibujar las tres frutas. Nosotros podriamos usar love.graphics.print 3 veces, cada una con una entrada de tabla diferente.. 
+Ahora queremos dibujar las tres frutas. Nosotros podríamos usar love.graphics.print 3 veces, cada una con una entrada de tabla diferente.. 
 
 #+BEGIN_SRC lua 
     function love.draw()
@@ -691,7 +691,7 @@ Cuando ejecutemos el juego veremos como se dibuja las 3 frutas. En el primer buc
 
 ** Editando tablas 
 
-¿Podemos añadir o borrar valores de una tabla? Podriamos cambiar e lvalor de 3 en otro núemro. Para eso usamos #frutas. Con el símbolo #, podemos obtener la longitud de una tabla. La longitud de una tabla se refiere al número de cosas que hayh en esa tabla. La longitud sería de 3 en nuestro caso.
+¿Podemos añadir o borrar valores de una tabla? Podríamos cambiar e lvalor de 3 en otro núemro. Para eso usamos #frutas. Con el símbolo #, podemos obtener la longitud de una tabla. La longitud de una tabla se refiere al número de cosas que hayh en esa tabla. La longitud sería de 3 en nuestro caso.
 
 #+BEGIN_SRC lua 
   function love.load()
@@ -886,7 +886,7 @@ Así ahora cada vez que llamemos a createRectangulo, un nuevo objeto rectángulo
   end
 #+END_SRC
 
-Cada vez que presionemos una telca, Love llamará a *love.keypressed* y le pasará la tecla presionada como argumento. Si esa tecla es la barra espaciadora, llamaremos a createRectangulo. 
+Cada vez que presionemos una tecla, Love llamará a *love.keypressed* y le pasará la tecla presionada como argumento. Si esa tecla es la barra espaciadora, llamaremos a createRectangulo. 
 
 La última cosa a hacer es cambiar nuestra actualización y que dibuje esa función. 
 
@@ -913,7 +913,7 @@ Ahora cuando ejecutemos el juego, un rectángulo en movimiento aparecerá cada v
 
 Con múltiples archivos nuestro código parecerá más organizado y más fácil de navegar. Vamos a crear un archivo llamado *ejemplo.lua*. Nos vamos a asegurar que está en el mismo directorio que *main.lua* 
 
-Dentro de este fichero, vamos a crear una variable. Pondremos *--! file:* arribad de todos los bloques de código para hacer más calro que en ese archivo hemos puesto el código.
+Dentro de este fichero, vamos a crear una variable. Pondremos *--! file:* arribad de todos los bloques de código para hacer más claro que en ese archivo hemos puesto el código.
 
 
 #+BEGIN_SRC lua 
@@ -1019,12 +1019,98 @@ test = 20
 
 ** Devolviendo un valor 
 
-Como las funciones, los archivos pueden devolver un valor. Si queremos devovler 10 al final del archivo ejemplo.lua, y dentro del archivo main.lua escribimos *pirnt(require("ejemplo"))* , entonces veremos que devuelve 10. 
+Como las funciones, los archivos pueden devolver un valor. Si queremos devolver 10 al final del archivo ejemplo.lua, y dentro del archivo main.lua escribimos *print(require("ejemplo"))* , entonces veremos que devuelve 10. 
 
 
 
+* Bibliotecas 
+
+Una biblioteca es código que o el mundo puede usar y añadir ciertas funcionalidades a su proyecto. 
+
+Probemos varias bibliotecas. Vamos a usar las bibliotecas *tick* y *rxi*. Podemos encontrar esas bibliotecas en [[https://github.com/rxi/tick][github]].
+
+Ahora vamos a [[https://raw.githubusercontent.com/rxi/tick/master/tick.lua][copiar el código]]. 
+
+Ahora vamos a crear un nuevo archivo llamado *tick.lua* y pegaremos el código en él. 
+
+Ahora seguiremos las siguientes instrucciones de la página de Github. Primero vamos  a requerirlo.
+
+#+BEGIN_SRC lua 
+  function love.load()
+    tick = require "tick"
+  end
+#+END_SRC
+
+Aquí vemos que *require* no tiene los paréntesis. Esto es porque cuando le pasamos un solo argumento, no temeos que usarlos. Ahora que se recomienda usarlos para cualquier otra función, pero con *require* lo más común es no usarlos. 
+
+Lo siguiente que vamos a hacer es poner *tick.update(dt)* en nuestro actualizador. 
+
+#+BEGIN_SRC lua 
+  function love.update(dt)
+    tick.update(dt)
+  end
+#+END_SRC
+
+Y ahora estamos preparados para usar la biblioteca. Crearemos un rectángulo que se dibujará después de 2 segundos.
+
+#+BEGIN_SRC lua 
+  function love.load()
+    tick = require "tick"
+
+    --Crearemos un buleano
+    dibujarRectangulo = false
+
+    --El primer argumento es una función
+    --El segundo argumento es el tiempo que lleva llamar a la función
+    tick.delay(function () dibujarRectangulo = true end, 2)
+  end
+
+  function love.draw()
+    --Si dibujarRectangulo es true se dibujará un rectángulo
+    if dibujarRectangulo then
+      love.graphics.rectangle("fill", 100, 100, 300, 200)
+    end
+  end
+#+END_SRC
+
+¿Hemos pasado una función como un argumento? Seguro, ¿por qué no? Una función es un tipo de variable después de todo. Así como podemos ver, con esta biblioteca poner un retraso a las cosas. Hay toneladas de bibliotecas con todo tipo de funcionalidades. 
+
+No te sientas culpable de usar una biblioteca. ¿Para qué reinventar la rueda? Eso es, a menos que estés interesado en aprenderlo. 
+
+Las bibliotecas no son mágicas. Está todo el código que podríamos escribir nosotros mismos. Crearemos una biblioteca en el futuro para entender mejor sobre ellas. 
+
+** Bibliotecas estándar
+
+Lua tiene una serie de bibliotecas de serie. Esas bibliotecas son llamadas *Bibliotecas estándar*. Son las funciones que hay contruidas dentro de Lua. *print*, por ejemplo, es parte de esas bibliotecas estándar. También *table.insert* y *table.remove* 
+
+Una biblioteca estándar muy importante que no hemos visto es la biblioteca *math*. Ésta proporciona funciones matemáticas, las cuales son muy útiles para hacer un juego. 
+
+Por ejemplo, *math.random* nos proporciona un número aleatorio. Como ejemplo, vamos a poner un rectángulo en una posición al azar al presionar la barra espaciadora. 
+
+#+BEGIN_SRC lua 
+  function love.load()
+    x = 30
+    y = 50
+  end
+
+  function love.draw()
+    love.graphics.rectangle("line", x, y, 100, 100)
+  end
+
+  function love.keypressed(key)
+    --Si la barra espaciadora es pulsada, entonces...
+    if key == "space" then
+      --x e y será un número aleatorio entre 100 y 500
+      x = math.random(100, 500)
+      y = math.random(100, 500)
+    end
+  end
+#+END_SRC
+
+
+Ahora que hemos entendido lo que es una biblioteca, podremos empezar a usar bibliotecas de clase
 
 * Footnotes
 
-[fn:1] Tilde en inglés virgulilla en españo. 
+[fn:1] Tilde en inglés virgulilla en español. 
 
