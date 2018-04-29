@@ -907,7 +907,119 @@ La última cosa a hacer es cambiar nuestra actualización y que dibuje esa funci
 Ahora cuando ejecutemos el juego, un rectángulo en movimiento aparecerá cada vez que presionemos la barra espaciadora.
 
 
+* Múltiples archivos y ámbitos 
 
+** Múltiples archivos 
+
+Con múltiples archivos nuestro código parecerá más organizado y más fácil de navegar. Vamos a crear un archivo llamado *ejemplo.lua*. Nos vamos a asegurar que está en el mismo directorio que *main.lua* 
+
+Dentro de este fichero, vamos a crear una variable. Pondremos *--! file:* arribad de todos los bloques de código para hacer más calro que en ese archivo hemos puesto el código.
+
+
+#+BEGIN_SRC lua 
+  --! file: ejemplo.lua 
+  test = 20
+#+END_SRC
+
+Ahora en *main.lua*, escribiremos *print(test)*. Cuando ejecutemos el juego, veremos que el test es igual a *nil*. Esto es porque no hemos cargado el fichero primero. Para hacer esto usaremos *require* pasándole el nombre del fichero como primer argumento.
+
+#+BEGIN_SRC lua 
+  --! file:main.lua
+  --Dejamos fuera la extensión
+  require("ejemplo")
+  print(test)
+#+END_SRC
+
+Recordar no añadir la extensión *.lua* en el nombre del fichero, porque Lua hace esto por nosotros.
+
+También podemos poner el archivo en un subdirectorio, pero en ese caso tendremos que añadir el path completo. 
+
+#+BEGIN_SRC lua 
+--Usamos . en vez de / 
+require("path.de.ejemplo")
+#+END_SRC
+
+Ahora cuando ejecutemos el juego veremos que test vale 20. 
+
+*test* en este caso es lo que llamamos una *variable global*. Esto es una variable que puede ser usada en donde sea de nuestro proyecto. Lo opuesto a variable global, es una *variable local*. Podemos crear una variable local escribiendo *local* delante del nombre de la variable. 
+
+#+BEGIN_SRC lua 
+--! file: ejemplo.lua
+local test = 20
+#+END_SRC
+
+Cuando ejecutemos el juego nos dirá que test valdrá de nuevo *nil*. Esto es a causa de su *ámbito*. 
+
+
+** Ámbito
+
+Una variable local está limitada a su *ámbito*. En el caso de test, el ámbito es el archivo ejemplo.lua. Esto quiere decir que test puede ser usado en cualquier lugar del archivo, pero no en otros archivos. 
+
+Si queremos crear una variable local dentro de un *bloque*, como una función, una declaración if, o un bucle for, entonces eso sería el ámbito de la variable. 
+
+#+BEGIN_SRC lua 
+    --! file: ejemplo.lua
+    if true then
+      local test = 20
+    end
+
+    print(test)
+    --Salida: nil
+
+#+END_SRC
+
+test es nil, porque hemos ejecutado la orden print fuera de su ámbito. 
+
+Los parámetros de funciones son como variables locales. Solo existen dentro de la función.
+
+Para realmente entender como el ámbito funciona, echemos un vistazo a la siguiente código: 
+
+#+BEGIN_SRC lua 
+  --! file: main.lua
+  test = 10
+  require("ejemplo")
+  print(test)
+  --Salida: 10
+  --! file ejemplo.lua
+  local test = 20 
+
+  function alguna_funcion(test)
+    if true then
+      local test = 40 
+      print(test)
+      --Salida: 40
+    end
+    print(test)
+    --Salida: 30
+  end
+
+  alguna_funcion(30)
+
+  print(test)
+  --Salida: 20
+#+END_SRC
+
+
+Si ejecutamos el juego, podremos ver dibujado: 40, 30, 20, 10. Echemos un ojo a este código paso a paso.
+
+El primer print dentro de la declaración if, es 40. Después de la declaración if, dibujaremos test de nuevo, ahora es 30, lo cual es porque hemos pasado ese argumento. El parámetro test no es afectado por el test que hay dentro de la declaración if. Dentro de la declaración if la variable local toma prioridad sobre el parámetro. 
+
+Fuera de la función también dibujamos print. Esta vez vale 20. El test creado al principio del fichero ejemplo.lua no será afectado por el test dentro de la función.
+
+Finalmente dibujamos test del fichero main.lua, y éste vale 10. La variable global no es afectada por la variable local dentro del fichero ejemplo.lua 
+
+En esta visualización del ámbito de cada variable test se ve más claro:
+
+Cuando creamos un variable local, no hay que asignarle un valor. 
+
+#+BEGIN_SRC lua 
+local test
+test = 20
+#+END_SRC
+
+** Devolviendo un valor 
+
+Como las funciones, los archivos pueden devolver un valor. Si queremos devovler 10 al final del archivo ejemplo.lua, y dentro del archivo main.lua escribimos *pirnt(require("ejemplo"))* , entonces veremos que devuelve 10. 
 
 
 
