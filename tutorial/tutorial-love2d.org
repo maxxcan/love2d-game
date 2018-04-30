@@ -294,7 +294,6 @@ Así si queremos dibujar un rectángulo relleno, hacemos lo siguiente:
 
 Ahora si ejecutamos el juego, podremos ver un rectángulo relleno
 
-
 * Moviendo un rectángulo 
 
 Ahora podemos empezar con la parte que a mí me gusta llamar "la parte divertida". Vamos a hacer que se mueva. 
@@ -906,7 +905,6 @@ La última cosa a hacer es cambiar nuestra actualización y que dibuje esa funci
 
 Ahora cuando ejecutemos el juego, un rectángulo en movimiento aparecerá cada vez que presionemos la barra espaciadora.
 
-
 * Múltiples archivos y ámbitos 
 
 ** Múltiples archivos 
@@ -1022,7 +1020,6 @@ test = 20
 Como las funciones, los archivos pueden devolver un valor. Si queremos devolver 10 al final del archivo ejemplo.lua, y dentro del archivo main.lua escribimos *print(require("ejemplo"))* , entonces veremos que devuelve 10. 
 
 
-
 * Bibliotecas 
 
 Una biblioteca es código que o el mundo puede usar y añadir ciertas funcionalidades a su proyecto. 
@@ -1110,11 +1107,11 @@ Por ejemplo, *math.random* nos proporciona un número aleatorio. Como ejemplo, v
 
 Ahora que hemos entendido lo que es una biblioteca, podremos empezar a usar bibliotecas de clase
 
-
 * Clases 
 
 Las clases son como planos. Podemos crear muchas casas usando un plano. De igual manera creamos muchos objetos de una clase. 
 
+[[./img/clases.png]]
 
 Para clases, vamos a usar la biblioteca: [[https://github.com/rxi/classic#start-of-content][classic]] 
 
@@ -1281,6 +1278,9 @@ Otra cosa que hace grande a las clases es la *herencia*
 
 Con la herencia, podemos extender nuestra clase. En otras palabras, podemos hacer copia de nuestro plano, y añadir nuevas características sin tener que tocar el original.
 
+
+[[./img/herencia.png]]
+
 Esto quiere decir que si tienes un juego con monstruos, cada monstruo tiene su propio ataque y se mueven de forma diferente. Pero ellos obtienen el mismo daño y son capaces de morir. Esas características que se solapan se podrían poner en lo que se llama una *superclase* o *clase base*. Éstas proporcionan unas características que todos los monstruos tienen. Y luego cada clase monstruo puede extender esa clase base y añadir sus propias características.
 
 Vamos a crear otra figura en movimiento, un círculo. ¿Qué tienen en común nuestro rectángulo y nuestro círculo? Ambos se mueven. Así haremos una clase base para ambas figuras. 
@@ -1386,6 +1386,126 @@ Haremos algo similar para el /Circulo/. Aunque en vez de altura y anchura le dam
 Ahora que tenemos nuestras clases preparadas, podemos empezar a hacer las *instancias* de esas clases. Con /r1 = Rectangulo(100, 100, 200, 50)/ creamos una instancia de nuestra clase /Rectangulo/. Es un objeto hecho con nuestro plano y no el plano en sí. Cualquier cambio que hagamos a nuestra instancia no afectará a la clase. Actualizamos y dibujamos esta instancia, y para eso usamos los dos puntos (:). Esto es porque necesitamos pasar nuestra instancia como primer argumento, y los dos puntos hace que Lua lo haga por nosotros.
 
 Y finalmente hacemos lo mismo con r2, excepto que ahora hacemos un Circulo. 
+
+* Imágenes 
+
+Crear y usar imágenes es una tarea muy fácil en Love. Primero necesitamos una
+imagen. Usaremos esta imagen
+
+[[./img/oveja.png]]
+
+Por supuesto, puedes usar la imagen que quieras. siempre que sea del tipo png. Ten seguro que la imagen está en el mismo directorio que tu fichero /main.lua/ 
+
+Primero necesitamos cargar la imagen, y guardarla en una variable. Para esto usaremos /love.graphics.newImage/. Le pasañmos el nombre de la imagen como una cadena de texto como primer argumento. ASí tendremos: 
+
+#+BEGIN_SRC lua 
+  function love.load()
+    miImagen = love.graphics.newImage("oveja.png")
+  end
+#+END_SRC
+
+También podemos poner la imagen en un subdirectorio, pero en ese caso tendremos que estar seguros de incluir el path completo. 
+
+#+BEGIN_SRC lua 
+  miImagen = love.graphics.newImage("path/a/oveja.png")
+#+END_SRC
+
+
+Ahora nuestra imagen está guardada dentro de *miImagen*. Ahora podemos usar /love.graphics.draw/ para dibujar nuestra imagen. 
+
+#+BEGIN_SRC lua 
+  function love.draw()
+    love.graphics.draw(miImagen, 100, 100)
+  end
+#+END_SRC
+
+Y así es como se dibuja una imagen. 
+
+** Argumento .draw() 
+
+Vamos a echar un vistazo a otro argumento de /love.graphics.draw()/. Todos los argumentos dentrás de image son opcionales. 
+
+#+BEGIN_SRC lua 
+r
+#+END_SRC
+
+La *r* otación (o ángulo). Todos los ángulos en Love son en radianes. Explicaremos más sobre los radianes en otro capítulo. 
+
+*sx* e *sy* 
+
+La escala *x* y la escala *y*. Para hacer por ejemplo una imagen dos veces más grande de lo que es.
+
+#+BEGIN_SRC lua 
+  love.graphics.draw(miImagen, 100, 100, 0, 2, 2)
+#+END_SRC
+
+También podemos usarlo para mostrar una imagen espejo de la otra 
+
+#+BEGIN_SRC lua 
+  love.graphics.draw(miImagen, 100, 100, 0, -1, 1)
+#+END_SRC
+
+*ox* y *oy* 
+
+El origen *x e y* de la imagen. 
+
+Por defecto, todo el escalado y la rotación es basada en la zona arriba-izquierda de la imagen. 
+
+[[./img/origen1.png]]
+
+
+Esto es basado en el _origen_ de la imagen. Si queremos escalar la imagen desde el centro, pondremos entonces el origen en el centro de la imagen. 
+
+#+BEGIN_SRC lua 
+  love.graphics.newImage(miImagen, 100, 100, 0, 2, 2, 39, 50)
+#+END_SRC
+
+
+[[./img/origen2.png]]
+
+
+*kx* y *ky* 
+
+Son para estirar las imágenes. Por ejemplo:
+
+
+
+[[./img/estirar.png]]
+
+
+** Objeto imagen 
+
+La imagen que /love.graphics.newImage/ devuelve, es en realidad un *objeto*. Un objeto [[https://love2d.org/wiki/Image][imagen]]. Este objeto tiene funciones que pueden usarse para editar nuestra imagen u obtener datos de ella. 
+
+Por ejemplo, podmeos usar *:getWidth()* y *:getHeight()* para obtener la anchura y la altura de la imagen. Podemos usar esto para poner el origen en el centro de nuestra imagen. 
+
+#+BEGIN_SRC lua 
+    function love.load()
+      miImagen = love.graphics.newImage("oveja.png")
+      anchura = miImagen:getWidth()
+      altura = miImagen:getHeight()
+    end
+
+    function love.draw()
+      love.graphics.draw("oveja.png", 100, 100, 0, 2, 2, anchura/2, altura/2)
+    end
+#+END_SRC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
