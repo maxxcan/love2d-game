@@ -1110,7 +1110,287 @@ Por ejemplo, *math.random* nos proporciona un número aleatorio. Como ejemplo, v
 
 Ahora que hemos entendido lo que es una biblioteca, podremos empezar a usar bibliotecas de clase
 
+
+* Clases 
+
+Las clases son como planos. Podemos crear muchas casas usando un plano. De igual manera creamos muchos objetos de una clase. 
+
+
+Para clases, vamos a usar la biblioteca: [[https://github.com/rxi/classic#start-of-content][classic]] 
+
+Una vez tengamos el nuevo fichero llamado *classic.lua* lo requeriremos. 
+
+#+BEGIN_SRC lua 
+  function love.load()
+    Object = require "classic"
+  end
+#+END_SRC
+
+Ahora estamos preparados para hacer una clase. Crearemos un nuevo fichero llamado rectangulo.lua y pondremos en él el siguiente código:
+
+#+BEGIN_SRC lua 
+  --! file: rectangulo.lua
+
+  --Ahora usaremos los dos puntos(:) en vez de un punto (.)
+  Rectangulo = Object:extend()
+
+  function Rectangulo.new(self)
+    self.test = math.random(1, 1000)
+  end
+#+END_SRC
+
+Todo será explicado pero primero pongamos el siguiente código en nuestro *main.lua* 
+
+#+BEGIN_SRC lua 
+  --! file: main.lua 
+  function love.load()
+    Object = require "classic"
+    --No olvidemos cargar el fichero
+    require "rectangulo"
+
+    r1 = Rectangulo()
+    r2 = Rectangulo()
+    print (r1.test, r2.test)
+  end
+#+END_SRC
+
+
+Cuando ejecutemos el juego, veremos que aparecerán dos números aleatorios.
+
+Así vamos a ver el código paso a paso. Primero creamos un nueva clase con *Rectangulo = Object:extend()*. Esto hace que *Rectangulo* se convierta en una clase. Esto será nuestro primer plano original. Como opuesto a las propiedades, las clases normalmente están escritas usando mayúsculas. 
+
+En *main.lua* escribimos *r1 = Rectangulo()*. Aunque *Rectangulo* sea una tabla, todavía podemos llamarlo como si fuera una función. El cómo trabaja lo veremos en otro capítulo. Pero llamando a *Rectangulo()*, creamos una nueva instancia. Lo que esto significa es que cogemos los planos originales y creamos un nuevo objeto con todas las clases como características. Cada nueva instancia es única. 
+
+Para probar que r1 es único, crearemos otra instancia llamada r2. Ambas tienen la propiedad *test*, pero diferentes valores. 
+
+Cuando llamamos a *Rectangulo()*, se ejecuta *Rectangulo.new*. Esto es lo que llamamos un *_constructor_* 
+
+El parámetro *self*, es la instancia que estamos modificando. Si tecleamos *Rectangulo.test= math.random(0, 1000)*, le damos propiedades al plano, y no a una instancia hecha con el plano. 
+
+Vamos a hacer algunos cambios a nuestras clase. 
+
+#+BEGIN_SRC lua 
+  --! file: rectangulo.lua
+  function Rectangulo.new(self)
+    self.x = 100
+    self.y = 100
+    self.altura = 200
+    self.anchura = 150
+    self.velocidad = 100
+  end
+
+  function Rectangulo.update(self, dt)
+    self.x = self.x + self.velocidad * dt
+  end
+
+  function Rectangulo.draw(self)
+    love.graphics.rectangle("line", self.x, self.y, self.altura, self.anchura)
+  end
+#+END_SRC
+
+Es como lo que hemos hecho en el capítulo 8. Excepto que esta vez hemos puesto el código del movimiento y el dibujado en el objeto. Ahora solo necesitamos llamar a *update* y *draw* en main.lua
+
+#+BEGIN_SRC lua 
+    --! file: main.lua
+
+    function love.load()
+      require = "rectangulo"
+      r1 = Rectangulo()
+      r2 = Rectangulo()
+    end
+
+    function love.update(dt)
+      r1.update(r1, dt)
+    end
+
+    function love.draw()
+      r1.draw(r1)
+    end
+
+#+END_SRC
+
+Nosotros también podemos hacer esto con las funciones también.
+
+#+BEGIN_SRC lua 
+    --! file: rectangulo.lua
+
+    --Lua devuelve esto en: Rectangulo.new(self)
+    function Rectangulo:new()
+      self.x = 100
+      self.y = 100
+      self.altura = 200
+      self.anchura = 150
+      self.velocidad = 100
+    end
+
+  --Lua devuelve esto en: Rectangulo.update(self, dt)
+  function Rectangulo:update(dt)
+  self.x = self.x + self.velocidad * dt
+  end
+
+  --Lua devuelve esto en: Rectangulo.draw(self)
+  function Rectangulo:draw()
+    love.graphics.rectangle("line", self.x, self.y, self.altura, self.anchura)
+  end 
+#+END_SRC
+
+Vamos a añadir algunos parámetros a *Rectangulo:new()* 
+
+#+BEGIN_SRC lua 
+  --! file: rectangulo.lua
+  function Rectangulo:new(x, y, anchura, altura)
+    self.x = x
+    self.y = y
+    self.anchura = anchura
+    self.altura = altura
+    self.velocidad = 100
+  end
+
+#+END_SRC
+
+
+Con esto podemos dar a r1 y r2 su propia posición y tamaño.
+
+#+BEGIN_SRC lua 
+    --! file: main.lua
+
+    function love.load()
+      r1 = Rectangulo(100, 100, 200, 50)
+      r2 = Rectangulo(180, 300, 25, 140)
+    end
+
+    function love.update(dt)
+      r1:update(dt)
+      r2:update(dt)
+    end
+
+    function love.draw()
+      r1:draw()
+      r2:draw()
+    end
+#+END_SRC
+
+
+Ahora tenemos dos rectángulos moviéndose. Esto es lo que hace a las clases tan grandes. r1 y r2 son lo mismo y también son únicas.
+
+Otra cosa que hace grande a las clases es la *herencia* 
+
+
+** Herencia 
+
+
+Con la herencia, podemos extender nuestra clase. En otras palabras, podemos hacer copia de nuestro plano, y añadir nuevas características sin tener que tocar el original.
+
+Esto quiere decir que si tienes un juego con monstruos, cada monstruo tiene su propio ataque y se mueven de forma diferente. Pero ellos obtienen el mismo daño y son capaces de morir. Esas características que se solapan se podrían poner en lo que se llama una *superclase* o *clase base*. Éstas proporcionan unas características que todos los monstruos tienen. Y luego cada clase monstruo puede extender esa clase base y añadir sus propias características.
+
+Vamos a crear otra figura en movimiento, un círculo. ¿Qué tienen en común nuestro rectángulo y nuestro círculo? Ambos se mueven. Así haremos una clase base para ambas figuras. 
+
+Crearemos un nuevo fichero llamado figura.lua y pondremos en él el siguiente código:
+
+#+BEGIN_SRC lua 
+  --! file: figura.lua
+  Figura = Object:extend()
+
+  function Figura:new(x, y)
+    self.x = x
+    self.y = y
+    self.velocidad = 100
+  end
+
+  function Figura:update(dt)
+    self.x = self.x + self.velocidad * dt
+  end
+#+END_SRC
+
+Nuestra clase base Figura ahora maneja el movimiento. Podemos pensar que clase base es solo un término. "A es una clase base de B". Una clase base es todavía igual que otra clase. La diferencia es el cómo la usamos.
+
+De todas formas, ahora que tenemos una clase base que maneja nuestro movimiento, podemos hacer *Rectangulo* una extensión de Figura, y borrar su actualizador.
+
+#+BEGIN_SRC lua 
+  --! file: rectangulo.lua
+  Rectangulo = Figura:extend()
+
+  function Rectangulo:new(x, y, anchura, altura)
+    Rectangulo.super.new(self, x, y)
+    self.anchura = anchura
+    self.altura = altura
+  end
+
+  function Rectangulo:draw()
+    love.graphics.rectangule("line", self.x, self.y, self.anchura, self.altura)
+  end
+#+END_SRC
+
+Con *Rectangulo = Figura:extend()* hacemos de /Rectangulo/ una extensión de Figura.
+
+Figura tiene su propia función llamada *:new()*. Para crear *Rectangulo:new()*, hemos sobre escrito la función original. Esto quiere decir que cuando llamemos a Rectangulo(), no se ejecutará Figura:new() en vez de Rectangulo:new().
+
+Pero rectangulo tiene la propiedad *super*, la cual es la clase desde donde /Rectangulo/ es extendido. Con *Rectangulo.super* podemos acceder a las funciones de la clase base, y usarlas para llamar a *Figura:new()*. 
+
+Hemos pasado /self/ como primer argumento a nosotros mismos, y no podemos permitir que Lua lo maneje con un doble punto (:), por eso no llamaremos a la función como la instancia. 
+
+Ahora necesitamos hacer una clase circulo. Crearemos un nuevo fichero llamado *circulo.lua* y escribiremos el siguiente código.
+
+#+BEGIN_SRC lua 
+  --! file: circulo.lua
+  Circulo = Figura:extend()
+
+  function Circulo:new(x, y, radio)
+    Circulo.super.new(self, x, y)
+    --Un círculo no tiene una anchura y altura sino un radio.
+    self.radio = radio
+  end
+
+  function Circulo:draw()
+    love.graphics.circle("line", self.x, self.y, self.radio)
+  end
+#+END_SRC
+
+Así hacemos al /Circulo/ una extensión de /Figura/. Le pasamos x e y a la función /new()/ de /Figura/ con /Circulo.super.new(sefl, x, y)/.
+
+También le damos a nuestra clase /Circulo/ su propia función /Draw/. Así es como dibujamos un círculo. Los círculos no tienen una altura y anchura sino un radio.
+
+Y ahora en el fichero /main.lua/ cargaremos /figura.lua/ y /circulo.lua/ y cambiaremos r2 a circulo
+
+#+BEGIN_SRC lua 
+  --! file: main.lua
+
+  function love.load()
+    Object = require "classic"
+    require "figura"
+
+    require "rectangulo"
+    require "circulo"
+
+    r1 = Rectangulo(100, 100, 200, 50)
+
+    r2 = Circulo(180, 300, 50)
+  end
+
+#+END_SRC
+
+Ahora cuando ejecutemos el juego veremos un rectángulo y un círculo moviéndose.
+
+**  Una cosa más
+
+Vayamos a través del código una vez maś.
+
+Primero hemos cargado la biblioteca /classic/ con /require "classic"/. Cargada esta biblioteca nos devuelve una tabla, y guardamos en la tabla el *Objeto*. Esto es lo más básico para simular una clase. Porque Lua no tiene clases, pero usando /classic/ tenemos una muy buena imitación de una clase.
+
+Luego cargamos /figura.lua/. En ese fichero hemos creado una nueva clase llamada *Figura*. Usaremos esa clase como una *clase base* para *Rectangulo* y *Circulo*. Las dos cosas que esas clases tiene en común es que ellas tiene una propiedad x e y, y que se mueven horizontalmente. Esas similitudes las ponemos en /Figura/.
+
+Ahora creamos la clase *Rectangulo*. Hacemos una extensión de nuestra clase base /Figura/. Dentro de la función /:new()/, el *constructor*, llamamos el constructor de nuestra clase base con /Rectangulo.super.new(self, x, y)/. Ahora pasamos /self/ como primer argumento, así que /Figura/ usará la instancia de nuestro plano, y no el plano en sí. Le damos a nuestro rectángulo unas propiedades  anchura y altura, y le damos una función /draw/.
+
+Haremos algo similar para el /Circulo/. Aunque en vez de altura y anchura le damos una propiedad radio.
+
+Ahora que tenemos nuestras clases preparadas, podemos empezar a hacer las *instancias* de esas clases. Con /r1 = Rectangulo(100, 100, 200, 50)/ creamos una instancia de nuestra clase /Rectangulo/. Es un objeto hecho con nuestro plano y no el plano en sí. Cualquier cambio que hagamos a nuestra instancia no afectará a la clase. Actualizamos y dibujamos esta instancia, y para eso usamos los dos puntos (:). Esto es porque necesitamos pasar nuestra instancia como primer argumento, y los dos puntos hace que Lua lo haga por nosotros.
+
+Y finalmente hacemos lo mismo con r2, excepto que ahora hacemos un Circulo. 
+
+
+
+
+
 * Footnotes
 
 [fn:1] Tilde en inglés virgulilla en español. 
-
