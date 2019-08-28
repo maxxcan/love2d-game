@@ -33,7 +33,7 @@ El autor del artículo original recomienda *Zerobrane* que es un IDE con muchas 
 Si posees Archlinux también puedes descargarlo usando *yaourt* 
 
 
-Una vez tengamos abierto nuestro editor o IDE preferido lo abrimos y creamos un fichero con el siguiente código:
+Una vez tengamos abierto nuestro editor o IDE preferido lo abrimos y creamos un fichero con el siguiente
 
 #+BEGIN_SRC lua
   function love.draw()
@@ -139,7 +139,7 @@ Y la forma más común:
   end
 #+END_SRC
 
-Primero empezamos usando la palabra clave *function*, seguido del nombre de la función. Una función es un tipo de varialbe, así que las mismas reglas que aplicamos cuando nombramos uan variable se aplica para las unciones. Después del nombre ponemos unos paréntesis. Ahora podemos empezar a escribgir el código que queremos poner dentro de la función. 
+Primero empezamos usando la palabra clave *function*, seguido del nombre de la función. Una función es un tipo de variable, así que las mismas reglas que aplicamos cuando nombramos uan variable se aplica para las unciones. Después del nombre ponemos unos paréntesis. Ahora podemos empezar a escribgir el código que queremos poner dentro de la función. 
 
 Una vez hecho esto, tenemos que escribir el nombre de la función para obtener el resultado. Esto es lo que llamamos *llamada a una función* 
 
@@ -162,7 +162,7 @@ Veamos el siguiente código
 : -- "Me gusta el número 2"
 : -- "Me gusta el número 100"
 
-Dentro del paréntesis de la función nosotros podmeos poner lo que llamamos *parámetros*. Los parámetros son variables temporales que solo existen dentro de la función. En este caso usamos el parámetro num. Ahora podemos usar num como cualquier otra variable.
+Dentro del paréntesis de la función nosotros podemos poner lo que llamamos *parámetros*. Los parámetros son variables temporales que solo existen dentro de la función. En este caso usamos el parámetro num. Ahora podemos usar num como cualquier otra variable.
 
 ** Return 
 
@@ -672,7 +672,7 @@ Para crear un bucle for, primero escribimos *for*. Después escribimos una varia
 
 Hay también un tercer número opcional. Es el cómo incrementa la variable. Si yo escribo *for i=6,18,4* esto hará la sucesión *6, 10, 14, 18. Con esta opción podemos hacer bucles que vayan hacia atrás con *-1*. 
 
-Nuestra tabla empeiza con 1 y tiene 3 valores, así que escribiremos:
+Nuestra tabla empieza con 1 y tiene 3 valores, así que escribiremos:
 
 #+BEGIN_SRC lua 
   function love.load()
@@ -690,7 +690,7 @@ Cuando ejecutemos el juego veremos como se dibuja las 3 frutas. En el primer buc
 
 ** Editando tablas 
 
-¿Podemos añadir o borrar valores de una tabla? Podríamos cambiar e lvalor de 3 en otro núemro. Para eso usamos #frutas. Con el símbolo #, podemos obtener la longitud de una tabla. La longitud de una tabla se refiere al número de cosas que hayh en esa tabla. La longitud sería de 3 en nuestro caso.
+¿Podemos añadir o borrar valores de una tabla? Podríamos cambiar el valor de 3 en otro número. Para eso usamos #frutas. Con el símbolo #, podemos obtener la longitud de una tabla. La longitud de una tabla se refiere al número de cosas que hayh en esa tabla. La longitud sería de 3 en nuestro caso.
 
 #+BEGIN_SRC lua 
   function love.load()
@@ -752,7 +752,7 @@ También podemos borrar valores de nuestra tabla. Para eso usamos *table.remove*
   end
 #+END_SRC
 
-Cuando borramos un valor de una tabla con *table.remove*, todos los elementos siguientes se mueven hacia arriba. Así lo que está en la posicion 3 estará ahora en la posición 2 en la tabla. 
+Cuando borramos un valor de una tabla con *table.remove*, todos los elementos siguientes se mueven hacia arriba. Así lo que está en la posición 3 estará ahora en la posición 2 en la tabla. 
 
 También podemos añadir o cambiar los valores dentro de la tabla directamente. Por ejemplo, podemos cambiar "manzana" por "tomate":
 
@@ -1078,7 +1078,7 @@ Las bibliotecas no son mágicas. Está todo el código que podríamos escribir n
 
 ** Bibliotecas estándar
 
-Lua tiene una serie de bibliotecas de serie. Esas bibliotecas son llamadas *Bibliotecas estándar*. Son las funciones que hay contruidas dentro de Lua. *print*, por ejemplo, es parte de esas bibliotecas estándar. También *table.insert* y *table.remove* 
+Lua tiene una serie de bibliotecas de serie. Esas bibliotecas son llamadas *Bibliotecas estándar*. Son las funciones que hay construidas dentro de Lua. *print*, por ejemplo, es parte de esas bibliotecas estándar. También *table.insert* y *table.remove* 
 
 Una biblioteca estándar muy importante que no hemos visto es la biblioteca *math*. Ésta proporciona funciones matemáticas, las cuales son muy útiles para hacer un juego. 
 
@@ -1168,7 +1168,7 @@ Vamos a hacer algunos cambios a nuestras clase.
 
 #+BEGIN_SRC lua 
   --! file: rectangulo.lua
-  function Rectangulo.new(self)
+  function Rectangulo.nuevo(self)
     self.x = 100
     self.y = 100
     self.altura = 200
@@ -1176,11 +1176,11 @@ Vamos a hacer algunos cambios a nuestras clase.
     self.velocidad = 100
   end
 
-  function Rectangulo.update(self, dt)
+  function Rectangulo.actualizar(self, dt)
     self.x = self.x + self.velocidad * dt
   end
 
-  function Rectangulo.draw(self)
+  function Rectangulo.dibujar(self)
     love.graphics.rectangle("line", self.x, self.y, self.altura, self.anchura)
   end
 #+END_SRC
@@ -1197,22 +1197,45 @@ Es como lo que hemos hecho en el capítulo 8. Excepto que esta vez hemos puesto 
     end
 
     function love.update(dt)
-      r1.update(r1, dt)
+      r1.actualizar(r1, dt)
     end
 
     function love.draw()
-      r1.draw(r1)
+      r1.dibujar(r1)
     end
 
 #+END_SRC
+
+Cuando arranquemos el juego veremos un rectángulo en movimiento.
+
+Así hemos creado una clase llamada *Rectángulo*. Hemos creado una instancia de esa clase llamada *r1*. Así ahora *r1* tiene las funciones de *actualizar* y *dibujar*. Llamaremos a esas funciones, y como primer argumento pasaremos la instancia en sí misma, *r1*. Esto es lo que *self* significa en la función. 
+
+Esto es molesto sin embargo, como tenemos que pasar *r1* cada vez que llamemos a una de esas funciones. Afortunadamente, Lua tiene un atajo para esto. Cuando usamos dos puntos (:), la llamada a la función automáticamente pasará el objeto a la izquierda de los dos puntos como primer argumento.
+
+Veamos lo en nuestro fichero *main.lua*
+
+#+begin_src lua
+--!file: main.lua
+
+function love.update(dt)
+--Lua transforma esto en: r1.actualizar(r1, dt)
+r1:actualizar(dt)
+end
+
+function love.draw()
+--Lua transforma esto en: r1.dibujar(r1)
+r1:dibujar()
+end
+#+end_src
+
 
 Nosotros también podemos hacer esto con las funciones también.
 
 #+BEGIN_SRC lua 
     --! file: rectangulo.lua
 
-    --Lua devuelve esto en: Rectangulo.new(self)
-    function Rectangulo:new()
+    --Lua devuelve esto en: Rectangulo.nuevo(self)
+    function Rectangulo:nuevo()
       self.x = 100
       self.y = 100
       self.altura = 200
@@ -1221,21 +1244,23 @@ Nosotros también podemos hacer esto con las funciones también.
     end
 
   --Lua devuelve esto en: Rectangulo.update(self, dt)
-  function Rectangulo:update(dt)
+  function Rectangulo:actualizar(dt)
   self.x = self.x + self.velocidad * dt
   end
 
-  --Lua devuelve esto en: Rectangulo.draw(self)
-  function Rectangulo:draw()
+  --Lua devuelve esto en: Rectangulo.dibujar(self)
+  function Rectangulo:dibujar()
     love.graphics.rectangle("line", self.x, self.y, self.altura, self.anchura)
   end 
 #+END_SRC
 
-Vamos a añadir algunos parámetros a *Rectangulo:new()* 
+Llamaremos a esto [[https://es.wikipedia.org/wiki/Az%25C3%25BAcar_sint%25C3%25A1ctico][azúcar sintáctico]]
+
+Vamos a añadir algunos parámetros a *Rectangulo:nuevo()* 
 
 #+BEGIN_SRC lua 
   --! file: rectangulo.lua
-  function Rectangulo:new(x, y, anchura, altura)
+  function Rectangulo:nuevo(x, y, anchura, altura)
     self.x = x
     self.y = y
     self.anchura = anchura
@@ -1257,13 +1282,13 @@ Con esto podemos dar a r1 y r2 su propia posición y tamaño.
     end
 
     function love.update(dt)
-      r1:update(dt)
-      r2:update(dt)
+      r1:actualizar(dt)
+      r2:actualizar(dt)
     end
 
     function love.draw()
-      r1:draw()
-      r2:draw()
+      r1:dibujar()
+      r2:dibujar()
     end
 #+END_SRC
 
@@ -1423,15 +1448,15 @@ Y así es como se dibuja una imagen.
 
 ** Argumento .draw() 
 
-Vamos a echar un vistazo a otro argumento de /love.graphics.draw()/. Todos los argumentos dentrás de image son opcionales. 
+Vamos a echar un vistazo a otro argumento de /love.graphics.draw()/. Todos los argumentos detrás de image son opcionales. 
 
 #+BEGIN_SRC lua 
 r
 #+END_SRC
 
-La *r* otación (o ángulo). Todos los ángulos en Love son en radianes. Explicaremos más sobre los radianes en otro capítulo. 
+La *r* rotación (o ángulo). Todos los ángulos en Love son en radianes. Explicaremos más sobre los radianes en otro capítulo. 
 
-*sx* e *sy* 
+*sx*  e *sy* 
 
 La escala *x* y la escala *y*. Para hacer por ejemplo una imagen dos veces más grande de lo que es.
 
