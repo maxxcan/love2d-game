@@ -1516,20 +1516,31 @@ Por ejemplo, podmeos usar *:getWidth()* y *:getHeight()* para obtener la anchura
     end
 #+END_SRC
 
+** Color 
 
+Podemos cambiar en qué color será dibujada la imagen con *love.graphics.setColor(r, g, b)*. Esto cambiará el color de todo el dibujo, no solo la imagen sino los rectángulos, las figuras y las líneas también. Esto usa el [[https://en.wikipedia.org/wiki/RGB_color_model][Sistema RGB]]. A pesar de que, el rango oficial va de 0 a 255, en LOVE este rango va de 0 a 1. Así, en vez de (255, 200, 40) podemos usar (1, 0.78, 0.15). Si solo sabemos los colores usando los rangos de 0 a 255, podemos calcular el número que queremos con número/255. Hay también un cuarto argumento el cual es un estándar para el alfa, con el que decidimos la transparencia de todo el dibujo. No olvidemos regresar al color blanco si no queremos ningún color. También podemos establecer el color del fondo con *love.graphics.setBackgroundColor (r, g, b)*. Si solo queremos llamarlo una vez, podemos llamarlo en *love.load*. Ejemplo: 
 
+#+BEGIN_SRC lua
+function love.load()
+   myImage = love.graphics.newImage("sheep.png")
+   love.graphics.setBackgroundColor(1, 1, 1)
+end
 
+function love.draw()
+   love.graphics.setColor(255/255, 200/255, 40/255, 127/255)
+   love.graphics.setColor(1, 0.78, 0.15, 0.5)
+   -- Or ..
+   love.graphics.draw(myImage, 100, 100)
+   -- Si no pasamos ningún  valor al alfa por defecto cogerá el 1
+   love.graphics.setColor(1, 1, 1)
+   love.graphics.draw(myImage, 200, 200)
+end
 
+#+END_SRC
 
+** Resumen 
 
-
-
-
-
-
-
-
-
+Cargamos una imagen con *myImage = love.graphics.newImage("ruta/a/imagen.png")*, el cual nos devuelve un objeto imagen que podemos guardar en una variable. Podemos pasar esta variable a *love.graphics.setColor(r, g, b)* para cambiar el color de la imagen y todo lo demás es dibujado. 
 
 
 
